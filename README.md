@@ -1,9 +1,4 @@
 # tusenskona
 
-## Author
 
-<!-- Insert Your Name Here -->
-
-## Description
-
-<!-- Describe your example here -->
+![alt text](https://github.com/virvel/tusenskona/pcb/main/pcb.png?raw=true)

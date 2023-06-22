@@ -1,4 +1,4 @@
-#include "tusenskona.h"
+#include "../../src/tusenskona.h"
 #include "daisysp.h"
 
 using namespace daisy;
