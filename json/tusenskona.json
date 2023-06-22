@@ -1,0 +1,72 @@
+{
+	"name": "tusenskona",
+	"som": "seed",
+	"defines": {
+		"OOPSY_TARGET_HAS_MIDI_INPUT": 1 
+	},
+	"display": {},
+	"audio": {
+    "channels": 2
+  },
+	"components": {
+		"sw1": {
+			"component": "Switch",
+			"pin": 27
+		},
+		"sw2": {
+			"component": "Switch",
+			"pin": 24
+		},
+		"knob1": {
+			"component": "AnalogControl",
+			"pin": 16
+		},
+		"knob2": {
+			"component": "AnalogControl",
+			"pin": 17
+		},
+		"knob3": {
+			"component": "AnalogControl",
+			"pin": 18
+		},
+		"knob4": {
+			"component": "AnalogControl",
+			"pin": 19
+		},
+		"encoder": {
+			"component": "Encoder",
+			"pin": {
+				"a": 26,
+				"b": 25,
+				"click": 14
+			}
+		},
+		"led": {
+			"component": "RgbLed",
+			"pin": {
+				"r": 28,
+				"g": 23,
+				"b": 22 
+			}
+		}
+	},
+	"aliases": {
+		"switch": "sw1",
+		"button": "sw1",
+		"switch1": "sw1",
+		"button1": "sw1",
+		"switch2": "sw2",
+		"button2": "sw2",
+		"encswitch": "encoder_rise",
+		"enp": "encoder_press",
+		"press": "encoder_press",
+		"knob": "knob1",
+		"ctrl": "knob1",
+		"ctrl1": "knob1",
+		"ctrl2": "knob2",
+		"ctrl3": "knob3",
+		"ctrl4": "knob4",
+		"led": "led"
+	}
+}
+

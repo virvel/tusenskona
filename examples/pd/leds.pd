@@ -1,0 +1,10 @@
+#N canvas 827 239 527 327 12;
+#X obj 119 199 r ctrl1 @hv_param;
+#X obj 279 199 r ctrl2 @hv_param;
+#X obj 439 199 r ctrl3 @hv_param;
+#X obj 119 239 s led_red @hv_param;
+#X obj 279 239 s led_green @hv_param;
+#X obj 439 239 s led_blue @hv_param;
+#X connect 0 0 3 0 empty;
+#X connect 1 0 4 0 empty;
+#X connect 2 0 5 0 empty;

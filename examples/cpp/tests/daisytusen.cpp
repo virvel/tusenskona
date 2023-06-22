@@ -37,7 +37,10 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 
 int inc = 0;
 int count = 0;
-Color clrs[4];
+float clrs[4][3] = {{0.5, 0., 0.},
+                {0., 0.5, 0.},
+                {0., 0., 0.5},
+                {0.5, 0, 0.5}};
 
 
 
@@ -71,7 +74,7 @@ void UpdateControls()
     sine.SetAmp(ctrl2);
     saw.SetAmp(ctrl2);
     
-    hw.led.SetColor(clrs[count]);
+    hw.led.Set(clrs[count][0], clrs[count][1],clrs[count][2]);
     hw.UpdateLeds();
 
 }
@@ -96,10 +99,10 @@ int main(void)
     rev.SetFeedback(0.99);
     rev.SetLpFreq(5000);
 
-    clrs[0].Init(0.5f, 0.f, 0.f);
-    clrs[1].Init(0.f, 0.5f, 0.f);
-    clrs[2].Init(0.f, 0.f, 0.5f);
-    clrs[3].Init(0.5f, 0.f, 0.5f);
+//    clrs[0].Init(0.5f, 0.f, 0.f);
+//    clrs[1].Init(0.f, 0.5f, 0.f);
+//    clrs[2].Init(0.f, 0.f, 0.5f);
+//    clrs[3].Init(0.5f, 0.f, 0.5f);
     hw.StartAdc();
     hw.StartAudio(AudioCallback);
 
