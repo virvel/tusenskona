@@ -15,32 +15,34 @@ ReverbSc rev;
 DelayLine<float, 24000> delay;
 float revAmount;
 
+int inc = 0;
+int count = 0;
+//Color clrs[4];
+float clrs[4][3] = {{1, 0., 0.},
+                {0., 1., 0.},
+                {0., 0., 1.},
+                {1., 0, 1.}};
+
 void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size)
 {
 
     for (size_t i = 0; i < size; i++)
     {
-//        out[0][i] = sine.Process();
-//        out[1][i] = saw.Process(); 
+        out[0][i] = sine.Process();
+        out[1][i] = saw.Process(); 
         float revL, revR;
         rev.Process(in[0][i], in[1][i], &revL, &revR);
-        out[0][i] = (1.f-revAmount)*in[0][i];
-        out[1][i] = (1.f-revAmount)*in[1][i];
+        out[0][i] += (1.f-revAmount)*in[0][i];
+        out[1][i] += (1.f-revAmount)*in[1][i];
         out[0][i] += revAmount*revL; 
         out[1][i] += revAmount*revR; 
         out[0][i] = tanh(out[0][i]);
         out[1][i] = tanh(out[1][i]);
-//        delay.Write(out[0][i] + 0.5*delay.Read());
-//        out[0][i] += 0.25*delay.Read();
+        delay.Write(out[0][i] + 0.5*delay.Read());
+        out[0][i] += 0.25*delay.Read();
     }
 }
 
-int inc = 0;
-int count = 0;
-float clrs[4][3] = {{0.5, 0., 0.},
-                {0., 0.5, 0.},
-                {0., 0., 0.5},
-                {0.5, 0, 0.5}};
 
 
 
@@ -74,6 +76,7 @@ void UpdateControls()
     sine.SetAmp(ctrl2);
     saw.SetAmp(ctrl2);
     
+//    hw.led.SetColor(clrs[count]);
     hw.led.Set(clrs[count][0], clrs[count][1],clrs[count][2]);
     hw.UpdateLeds();
 
@@ -81,6 +84,11 @@ void UpdateControls()
 
 int main(void)
 {
+//    clrs[0].Init(0.5f, 0.f, 0.f);
+//    clrs[1].Init(0.f, 0.5f, 0.f);
+//    clrs[2].Init(0.f, 0.f, 0.5f);
+//    clrs[3].Init(0.5f, 0.f, 0.5f);
+
     hw.Init();
     hw.SetAudioBlockSize(48); // number of samples handled per callback
     hw.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
@@ -99,10 +107,6 @@ int main(void)
     rev.SetFeedback(0.99);
     rev.SetLpFreq(5000);
 
-//    clrs[0].Init(0.5f, 0.f, 0.f);
-//    clrs[1].Init(0.f, 0.5f, 0.f);
-//    clrs[2].Init(0.f, 0.f, 0.5f);
-//    clrs[3].Init(0.5f, 0.f, 0.5f);
     hw.StartAdc();
     hw.StartAudio(AudioCallback);
 
