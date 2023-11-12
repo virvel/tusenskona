@@ -1,4 +1,6 @@
+USE_FATFS=1
 # Project Name
+
 TARGET = granular
 
 # Sources

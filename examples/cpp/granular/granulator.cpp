@@ -67,7 +67,7 @@ void Granulator::init(float * buffer, uint32_t numSamples) {
 void Granulator::setOffset(float offset) {
     float jitter;
     for (auto &g : m_grains) {
-        jitter = static_cast<uint32_t>(1000.f*dist(gen));
+        jitter = static_cast<uint32_t>(10000.f*dist(gen));
         g.setJitter(jitter * m_spray);
         g.setOffset(offset);
     }
