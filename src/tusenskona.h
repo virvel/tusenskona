@@ -1,4 +1,3 @@
-#pragma once
 #ifndef TUSENSKONA_H
 #define TUSENSKONA_H
 
