@@ -4,3 +4,6 @@
 [submodule "DaisySP"]
 	path = DaisySP
 	url = git@github.com:electro-smith/DaisySP.git
+[submodule "virveldsp"]
+	path = virveldsp
+	url = https://github.com/virvel/virveldsp

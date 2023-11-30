@@ -1,18 +1,12 @@
-#include "../../src/tusenskona.h"
+#include "tusenskona.h"
 #include "daisysp.h"
 #include "granulator.h"
 
-using namespace daisy;
-using namespace daisysp;
+daisy::Tusenskona hw;
+dsp::Granulator gran;
 
-Tusenskona hw;
-
-ReverbSc rev;
-Granulator gran;
 float volume;
 
-// Size yields buffer length of ~21.8 secs, while maximum for 48000Khz stereo float is ~43 secs
-// number_of_entries/ (num_channels * sampleRate * sizeof(float))
 const uint32_t BUFFER_SIZE = 8*1024*1024;
 
 DSY_SDRAM_BSS float buffer[BUFFER_SIZE];
@@ -34,8 +28,8 @@ float clrs[4][3] = {{1, 0., 0.},  // RED
                     {0., 0., 1.}, // BLUE
                     {1., 0, 1.}}; // PURPLE
 
-static SdmmcHandler sdcard;
-FatFSInterface fsi;
+static daisy::SdmmcHandler sdcard;
+daisy::FatFSInterface fsi;
 FIL SDFile;
 
 const int maxFiles = 1;
@@ -177,7 +171,7 @@ void loadWavFiles()
     f_closedir(&dir);
 }
 
-void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size)
+void AudioCallback(daisy::AudioHandle::InputBuffer in, daisy::AudioHandle::OutputBuffer out, size_t size)
 {
 
     for (size_t i = 0; i < size; i++)
@@ -188,20 +182,22 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
         out[0][i] = volume * gran.play();
         out[1][i] = out[0][i]; 
 
+        /*
         float revL, revR;
         rev.Process(out[0][i], out[1][i], &revL, &revR);
         out[0][i] += revL;
         out[1][i] += revR;
+        */
     }
 }
 
 void UpdateControls() {
     hw.ProcessAllControls();
     
-    float ctrl0 = hw.GetKnobValue((Tusenskona::Knob)0);
-    float ctrl1 = hw.GetKnobValue((Tusenskona::Knob)1);
-    float ctrl2 = hw.GetKnobValue((Tusenskona::Knob)2);
-    float ctrl3 = hw.GetKnobValue((Tusenskona::Knob)3);
+    float ctrl0 = hw.GetKnobValue((daisy::Tusenskona::Knob)0);
+    float ctrl1 = hw.GetKnobValue((daisy::Tusenskona::Knob)1);
+    float ctrl2 = hw.GetKnobValue((daisy::Tusenskona::Knob)2);
+    float ctrl3 = hw.GetKnobValue((daisy::Tusenskona::Knob)3);
  
     record ^= hw.button1.FallingEdge(); 
 
@@ -221,8 +217,8 @@ void UpdateControls() {
         }
 
         case FX: {
-            rev.SetFeedback(ctrl0);
-            rev.SetLpFreq(ctrl1*10000);
+            //rev.SetFeedback(ctrl0);
+            //rev.SetLpFreq(ctrl1*10000);
             break;
         }
 
@@ -258,22 +254,25 @@ int main(void)
 {
     hw.Init();
     hw.SetAudioBlockSize(48); 
-    hw.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
+    hw.SetAudioSampleRate(daisy::SaiHandle::Config::SampleRate::SAI_48KHZ);
 
     gran.init(&buffer[0], BUFFER_SIZE); 
     std::fill(&buffer[0], &buffer[BUFFER_SIZE - 1], 0.f);
 
-    rev.Init(48000);
+    /*rev.Init(48000);
     rev.SetFeedback(0.5f);
     rev.SetLpFreq(5000);
+    */
 
-    SdmmcHandler::Config sd_cfg;
-    sd_cfg.speed = SdmmcHandler::Speed::MEDIUM_SLOW;
-    sd_cfg.width = SdmmcHandler::BusWidth::BITS_4;
+    //daisy::Random::GetValue();
+
+    daisy::SdmmcHandler::Config sd_cfg;
+    sd_cfg.speed = daisy::SdmmcHandler::Speed::MEDIUM_SLOW;
+    sd_cfg.width = daisy::SdmmcHandler::BusWidth::BITS_4;
     sdcard.Init(sd_cfg);
 
     // Link hardware and FatFS
-    fsi.Init(FatFSInterface::Config::MEDIA_SD);
+    fsi.Init(daisy::FatFSInterface::Config::MEDIA_SD);
 
     loadWavFiles();
 
