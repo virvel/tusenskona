@@ -1,3 +1,6 @@
 build/
 .DS_Store
 *.swp
+*kicad_pcb.lck
+*kicad_sch.lck
+
