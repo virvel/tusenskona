@@ -6,14 +6,13 @@
 #include "../../../dsp-headers/dsp/trigger.hpp"
 #include "../../../dsp-headers/dsp/dsp.h"
 #include "../../../dsp-headers/dsp/waveshape.h"
-#include "../../../libDaisy/src/dev/trill/Trill.h";
+#include "../../../libDaisy/src/dev/trill/Trill.h"
 #include <memory>
 
 using namespace daisy;
 using namespace daisysp;
 
 Tusenskona hw;
-Trill trill;
 
 #define SAMPLE_RATE 48000.f
 #define BLOCK_SIZE 512
@@ -92,25 +91,6 @@ int main(void) {
   hw.SetAudioSampleRate(daisy::SaiHandle::Config::SampleRate(SAMPLE_RATE));
   hw.SetAudioBlockSize(BLOCK_SIZE); // number of samples handled per callback
   
-  int i2cBus = 1;
-  int ret = trill.setup(i2cBus, Trill::CRAFT);
-
-  if (ret) {
-    hw.seed.PrintLine("trill.setup() returned %d", ret);
-  }
-
-  trill.setPrescaler(2);
-
-  while(1) {
-    hw.seed.DelayMs(100);
-    trill.readI2C();
-    for (auto &x: trill.rawData) {
-      hw.seed.Print("%d ", int(x*100000.f));
-    }
-    hw.seed.PrintLine("");
-  }
-  
-
   // Hacky way to put buffer on SDRAM instead of rewrite
   buf->buffer = innerBuffer;
   buf->bufferlength = buflength;
