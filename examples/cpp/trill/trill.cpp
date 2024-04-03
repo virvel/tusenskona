@@ -1,4 +1,5 @@
-#include "daisysp.h"
+#include "../../../src/tusenskona.h"
+#include "../../../DaisySP/Source/daisysp.h"
 #include "../../../libDaisy/src/dev/trill/Trill.h"
 #include "../../../dsp-headers/dsp/wavetable.hpp"
 #include "../../../dsp-headers/dsp/interpolation.hpp"
