@@ -4,17 +4,17 @@
 
 TrillHandler::TrillHandler() {};
 
-int TrillHandler::init(Trill trill) {
+int TrillHandler::init(Trill* trill) {
   m_trill = trill;
 }
 
 void TrillHandler::poll() {
-  m_trill.readI2C();
+  m_trill->readI2C();
   int i = 0;
-  for (; i < 9; i++)  A[i]    = m_trill.rawData[i];
-  for (; i < 17; i++) B[i-8]  = m_trill.rawData[i];
-  for (; i < 26; i++) C[i-16] = m_trill.rawData[i];
-  for (; i < 36; i++) D[i-25] = m_trill.rawData[i];
+  for (; i < 9; i++)  A[i]    = m_trill->rawData[i];
+  for (; i < 17; i++) B[i-8]  = m_trill->rawData[i];
+  for (; i < 26; i++) C[i-16] = m_trill->rawData[i];
+  for (; i < 36; i++) D[i-25] = m_trill->rawData[i];
 }
 
 // Sum of field NORMALIZED to number of tongues on each.
@@ -49,20 +49,20 @@ int TrillHandler::getTop(TrillCtrl field) {
   switch (field) {
     case TrillCtrl::A :
       for (int i = 8; i >= 0; i--) 
-        if (A[i] != 0.f) 
+        if (A[i] > 0.f) 
           return i;
 
     case TrillCtrl::B :
       for (int i = 7; i >= 0; i--) 
-        if (B[i] != 0.f)  return i;
+        if (B[i] > 0.f)  return i;
 
     case TrillCtrl::C :
       for (int i = 8; i >= 0; i--) 
-        if (C[i] != 0.f) return i;
+        if (C[i] > 0.f) return i;
 
     case TrillCtrl::D :
       for (int i = 9; i >= 0; i--) 
-        if (D[i] != 0.f)  return i;
+        if (D[i] > 0.f)  return i;
 
     default:
       break;
@@ -74,19 +74,19 @@ int TrillHandler::getBottom(TrillCtrl field) {
   switch (field) {
     case TrillCtrl::A :
       for (int i = 0; i < 9; i++) 
-        if (A[i] != 0.f) return i;
+        if (A[i] > 0.f) return i;
 
     case TrillCtrl::B :
       for (int i = 0; i < 8; i++) 
-        if (B[i] != 0.f)  return i;
+        if (B[i] > 0.f)  return i;
 
     case TrillCtrl::C :
       for (int i = 0; i < 9; i++) 
-        if (C[i] != 0.f) return i;
+        if (C[i] > 0.f) return i;
 
     case TrillCtrl::D :
       for (int i = 0; i < 10; i++) 
-        if (D[i] != 0.f) return i;
+        if (D[i] > 0.f) return i;
 
     default:
       break;
@@ -158,9 +158,9 @@ std::tuple<float, int> TrillHandler::globalMax() {
   float max = 0.f;
   int idx = 0;
   int i = 0;
-  for (float &x: m_trill.rawData) {
+  for (float &x: m_trill->rawData) {
     if (x > max) {
-      max = m_trill.rawData[i];
+      max = m_trill->rawData[i];
       idx = i;
     }
     i++;
@@ -174,11 +174,10 @@ std::tuple<float, int> TrillHandler::globalMin() {
   float min = INFINITY;
   int idx = 0;
   int i = 0;
-  for (float &x: m_trill.rawData) {
-    if (x < min) {
-      min = m_trill.rawData[i];
+  for (float &x: m_trill->rawData) {
+    if (x < min) 
+      min = m_trill->rawData[i];
       idx = i;
-    }
     i++;
   }
 
@@ -191,10 +190,9 @@ int TrillHandler::getVertical() {
   int idx = 0; 
   calcSum();
   int i = 0;
-  for (auto &x: {A_sum, B_sum, C_sum, D_sum}) {
+  for (auto &x: {A_sum, B_sum, C_sum, D_sum}) 
     if (x > max) idx = i;
     i++;
-  }
 }
 
 

@@ -24,10 +24,10 @@ class TrillHandler {
 
   float A_sum, B_sum, C_sum, D_sum;
 
-  Trill m_trill;
+  Trill* m_trill;
 
   TrillHandler();
-  int init(Trill trill);
+  int init(Trill* trill);
 
   public: 
     void poll();
