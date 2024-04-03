@@ -1,9 +1,7 @@
-#include "../../../src/tusenskona.h"
 #include "daisysp.h"
 #include "../../../libDaisy/src/dev/trill/Trill.h"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/waveshape.h"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/wavetable.hpp"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/interpolation.hpp"
+#include "../../../dsp-headers/dsp/wavetable.hpp"
+#include "../../../dsp-headers/dsp/interpolation.hpp"
 #include <memory>
 
 #define SAMPLE_RATE 44100
