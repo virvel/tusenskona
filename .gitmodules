@@ -7,6 +7,6 @@
 [submodule "virveldsp"]
 	path = virveldsp
   url = https://github.com/virvel/virveldsp
-[submodule "dspheaders"]
-  path = dspheaders
-  url = git@github.com:vsandstrom/dspheaders.git
+[submodule "dsp-headers"]
+	path = dsp-headers
+	url = git@github.com:vsandstrom/dsp-headers.git
