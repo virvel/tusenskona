@@ -2,10 +2,10 @@
 TARGET = trill
 
 ROOT_DIR = ../../..
-VIKTOR_DIR = /Users/viktorsandstrom/Documents/CPP/dsp/dsp
+DSP_DIR = $(ROOT_DIR)/dsp-headers/dsp
 
 # Sources
-CPP_SOURCES = trill.cpp $(ROOT_DIR)/src/tusenskona.cpp $(VIKTOR_DIR)/wavetable.cpp $(VIKTOR_DIR)/interpolation.cpp
+CPP_SOURCES = trill.cpp $(ROOT_DIR)/src/tusenskona.cpp $(DSP_DIR)/wavetable.cpp $(DSP_DIR)/interpolation.cpp
 
 # Library Locations
 LIBDAISY_DIR = $(ROOT_DIR)/libDaisy

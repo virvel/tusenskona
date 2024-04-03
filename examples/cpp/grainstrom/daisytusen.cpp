@@ -1,11 +1,11 @@
 #include "../../../src/tusenskona.h"
 #include "daisysp.h"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/grain.hpp"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/buffer.hpp"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/interpolation.hpp"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/trigger.hpp"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/dsp.h"
-#include "/Users/viktorsandstrom/Documents/CPP/dsp/dsp/waveshape.h"
+#include "../../../dsp-headers/dsp/grain.hpp"
+#include "../../../dsp-headers/dsp/buffer.hpp"
+#include "../../../dsp-headers/dsp/interpolation.hpp"
+#include "../../../dsp-headers/dsp/trigger.hpp"
+#include "../../../dsp-headers/dsp/dsp.h"
+#include "../../../dsp-headers/dsp/waveshape.h"
 #include "../../../libDaisy/src/dev/trill/Trill.h";
 #include <memory>
 
