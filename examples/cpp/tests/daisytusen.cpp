@@ -1,18 +1,17 @@
 #include "../../src/tusenskona.h"
 #include "daisysp.h"
 
+
 using namespace daisy;
 using namespace daisysp;
-
 
 Tusenskona hw;
 
 float freq = 440.f;
 
-Oscillator saw;
-Oscillator sine;
-ReverbSc rev;
-DelayLine<float, 24000> delay;
+daisysp::Oscillator saw;
+daisysp::Oscillator sine;
+daisysp::DelayLine<float, 24000> delay;
 float revAmount;
 
 int inc = 0;
@@ -30,12 +29,6 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
     {
         out[0][i] = sine.Process();
         out[1][i] = saw.Process(); 
-        float revL, revR;
-        rev.Process(in[0][i], in[1][i], &revL, &revR);
-        out[0][i] += (1.f-revAmount)*in[0][i];
-        out[1][i] += (1.f-revAmount)*in[1][i];
-        out[0][i] += revAmount*revL; 
-        out[1][i] += revAmount*revR; 
         out[0][i] = tanh(out[0][i]);
         out[1][i] = tanh(out[1][i]);
         delay.Write(out[0][i] + 0.5*delay.Read());
@@ -60,9 +53,6 @@ void UpdateControls()
     sine.SetFreq(freq);
     freq = powf(2.f,6.0f*ctrl1) * 40.f; 
     saw.SetFreq(freq);
-
-    revAmount = ctrl3;
-
 
     int enc = hw.encoder.Increment();
     bool sw1 = hw.encoder.Pressed();
@@ -102,10 +92,6 @@ int main(void)
     
     delay.Init();
     delay.SetDelay(static_cast<size_t>(24000));
-    
-    rev.Init(48000);
-    rev.SetFeedback(0.99);
-    rev.SetLpFreq(5000);
 
     hw.StartAdc();
     hw.StartAudio(AudioCallback);

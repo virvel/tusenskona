@@ -4,7 +4,7 @@ USE_FATFS=1
 TARGET = granular
 
 ROOT_DIR = ../../..
-VIRVEL_DIR = $(ROOT_DIR)/virveldsp/src
+VIRVEL_DIR = ../virveldsp/src
 
 # Sources
 CPP_SOURCES = granular.cpp $(ROOT_DIR)/src/tusenskona.cpp $(VIRVEL_DIR)/granulator.cpp

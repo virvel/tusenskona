@@ -5,5 +5,5 @@
 	path = DaisySP
 	url = git@github.com:electro-smith/DaisySP.git
 [submodule "virveldsp"]
-	path = virveldsp
+	path = examples/cpp/virveldsp
 	url = https://github.com/virvel/virveldsp

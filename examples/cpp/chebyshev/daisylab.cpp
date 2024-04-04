@@ -15,7 +15,6 @@ float freq = 440.f;
 
 Shaper<512> shaper;
 Shaper<512> shaper2;
-ReverbSc rev;
 
 Oscillator sine;
 
@@ -46,10 +45,6 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
         float y = shaper2.process(shaper.process(s))*0.5 + s*0.5;
         out[0][i] = y;
         out[1][i] = y; 
-        float revL, revR; 
-        rev.Process(out[1][i], out[1][i], &revL, &revR); 
-        out[0][i] += revL;
-        out[1][i] += revR;
         out[0][i] *= z;
         out[1][i] *= z;
         float * ws = shaper.getWeights();
@@ -89,9 +84,6 @@ int main(void)
     hw.Init();
     hw.SetAudioBlockSize(48); // number of samples handled per callback
     hw.SetAudioSampleRate(SaiHandle::Config::SampleRate::SAI_48KHZ);
-    rev.Init(48000); 
-    rev.SetFeedback(0.3);
-    rev.SetLpFreq(5000);
     shaper.init();
     shaper2.init();
     sine.Init(48000);
