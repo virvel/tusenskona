@@ -1,16 +1,17 @@
-#include "../../../src/tusenskona.h"
-#include "daisysp.h"
-#include "../../../dsp-headers/dsp/grain.hpp"
-#include "../../../dsp-headers/dsp/buffer.hpp"
-#include "../../../dsp-headers/dsp/interpolation.hpp"
-#include "../../../dsp-headers/dsp/trigger.hpp"
-#include "../../../dsp-headers/dsp/dsp.h"
-#include "../../../dsp-headers/dsp/waveshape.h"
-#include "../../../libDaisy/src/dev/trill/Trill.h"
 #include <memory>
+#include "src/tusenskona.h"
+#include "libDaisy/src/dev/trill/Trill.h"
+#include "daisysp.h"
+#include "dsp-headers/dsp/grain.hpp"
+#include "dsp-headers/dsp/buffer.hpp"
+#include "dsp-headers/dsp/waveshape.h"
+#include "dsp-headers/dsp/interpolation.hpp"
+#include "dsp-headers/dsp/trigger.hpp"
+#include "dsp-headers/dsp/dsp.h"
 
 using namespace daisy;
 using namespace daisysp;
+namespace dsp = dspheaders;
 
 Tusenskona hw;
 
@@ -30,10 +31,10 @@ const float min_interval = 0.2;
 
 DSY_SDRAM_BSS float innerBuffer[buflength];
 DSY_SDRAM_BSS float envBuffer[envlength];
-static dspheaders::Granulator* gryn;
-// static dspheaders::Dust trig = dspheaders::Dust(g_interval, SAMPLE_RATE);
-static dspheaders::Impulse trig = dspheaders::Impulse(g_interval, SAMPLE_RATE);
-std::shared_ptr<dspheaders::Buffer> buf = std::shared_ptr<Buffer>(new dspheaders::Buffer(0.f, SAMPLE_RATE, dspheaders::interpolation::linear)
+static dsp::Granulator* gryn;
+// static dsp::Dust trig = dsp::Dust(g_interval, SAMPLE_RATE);
+static dsp::Impulse trig = dsp::Impulse(g_interval, SAMPLE_RATE);
+std::shared_ptr<dsp::Buffer> buf = std::shared_ptr<Buffer>(new dsp::Buffer(0.f, SAMPLE_RATE, dsp::interpolation::linear)
 );
 
 unsigned writeptr = 0;
@@ -66,15 +67,15 @@ void UpdateControls() {
 
     if (sw2) {
       // hw.led.Set(0.4, 0.5, 0.9);
-      g_interval = dspheaders::map(ctrl, 0.f, 1.f, 0.1, 4.f);
+      g_interval = dsp::map(ctrl, 0.f, 1.f, 0.1, 4.f);
       gryn->setJitter(ctrl1);
     } else {
-      gryn->setGrainSize(dspheaders::map(ctrl, 0.f, 1.f, 0.05, 2.f));
-      gryn->setNumGrains((unsigned)dspheaders::map(ctrl1, 0.f, 1.f, 1.f, MAXGRAINS));
+      gryn->setGrainSize(dsp::map(ctrl, 0.f, 1.f, 0.05, 2.f));
+      gryn->setNumGrains((unsigned)dsp::map(ctrl1, 0.f, 1.f, 1.f, MAXGRAINS));
     }
 
     g_position = ctrl2;
-    g_rate = dspheaders::map(ctrl3, 0.f, 1.f, 0.f, 2.f);
+    g_rate = dsp::map(ctrl3, 0.f, 1.f, 0.f, 2.f);
 
     // int enc = hw.encoder.Increment();
     if (hw.encoder.Pressed()) {
@@ -98,13 +99,13 @@ int main(void) {
 
   hanning(envBuffer, envlength);
 
-  gryn = new dspheaders::Granulator(
+  gryn = new dsp::Granulator(
     0.2, 
     SAMPLE_RATE, 
     MAXGRAINS, 
     envBuffer,
     envlength,
-    dspheaders::interpolation::cubic,
+    dsp::interpolation::cubic,
     buf
   );
 

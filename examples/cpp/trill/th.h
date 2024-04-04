@@ -1,7 +1,7 @@
 #include "../../../libDaisy/src/dev/trill/Trill.h"
 #include <tuple>
 
-#define N_TRILL 36 // NUM PINS
+#define N_TRILL 36 // NUM PINS !! Not enough pins on hardware
 
 enum class TrillCtrl {
   A, 

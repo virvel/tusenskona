@@ -1,10 +1,10 @@
 #include "src/tusenskona.h"
-#include "../../../DaisySP/Source/daisysp.h"
-#include "../../../libDaisy/src/dev/trill/Trill.h"
-#include "../../../dsp-headers/dsp/wavetable.hpp"
-#include "../../../dsp-headers/dsp/interpolation.hpp"
+#include "DaisySP/Source/daisysp.h"
+#include "libDaisy/src/dev/trill/Trill.h"
+#include "dsp-headers/dsp/dsp.h"
+#include "dsp-headers/dsp/wavetable.hpp"
+#include "dsp-headers/dsp/interpolation.hpp"
 #include "th.h"
-#include <memory>
 
 #define SAMPLE_RATE 44100
 #define BLOCK_SIZE 32
@@ -12,9 +12,9 @@
 
 using namespace daisy;
 using namespace daisysp;
-using namespace dspheaders;
+namespace dsp = dspheaders;
 
-Wavetable* wta[VOICES];
+dsp::Wavetable* wta[VOICES];
 
 int vol[VOICES] = {0};
 
@@ -23,8 +23,8 @@ Trill trill;
 TrillHandler th;
 
 void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
+  float sig = 0.f;
   for (size_t i = 0; i < size; i++) {
-    float sig;
     for (int j = 0; j < VOICES; j++) {
       sig += wta[j]->play() * th.getPinValue(j) * 0.2;
     }
@@ -43,7 +43,7 @@ int main(void) {
   float freq = 200.f;
   float ot = 1.f;
   for (auto &wt: wta) {
-    wt = new Wavetable(SINE, 1024, SAMPLE_RATE, interpolation::cubic);
+    wt = new dsp::Wavetable(dsp::SINE, 1024, SAMPLE_RATE, dsp::interpolation::cubic);
     wt->frequency = freq*ot;
     ot+=1.f;
   }

@@ -14,3 +14,8 @@ DAISYSP_DIR = $(ROOT_DIR)/DaisySP
 # Core location, and generic Makefile.
 SYSTEM_FILES_DIR = $(LIBDAISY_DIR)/core
 include $(SYSTEM_FILES_DIR)/Makefile
+
+CPPFLAGS += -I$(ROOT_DIR) \
+
+						
+
