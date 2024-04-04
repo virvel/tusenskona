@@ -1,11 +1,32 @@
 #include "th.h"
+#include "../../../libDaisy/src/dev/trill/Trill.h"
 #include <cmath>
 #include <tuple>
 
 TrillHandler::TrillHandler() {};
 
+// Default i2c bus on board
 int TrillHandler::init(Trill* trill) {
+  int res;
+  int i2c_bus = 1;
   m_trill = trill;
+  res = m_trill->setup(i2c_bus, Trill::CRAFT);
+  config(TrillConfig{4, 0.25});
+  return res;
+}
+
+// If other than default i2c bus is used
+int TrillHandler::init(Trill* trill, unsigned i2c_bus) {
+  int res;
+  m_trill = trill;
+  res = m_trill->setup(i2c_bus, Trill::CRAFT);
+  config(TrillConfig{4, 0.25});
+  return res;
+}
+
+void TrillHandler::config(TrillConfig cfg) {
+  m_trill->setPrescaler(cfg.prescaler);
+  m_trill->setNoiseThreshold(cfg.threshold);
 }
 
 void TrillHandler::poll() {
@@ -48,24 +69,35 @@ void TrillHandler::calcSum() {
 int TrillHandler::getTop(TrillCtrl field) {
   switch (field) {
     case TrillCtrl::A :
-      for (int i = 8; i >= 0; i--) 
-        if (A[i] > 0.f) 
+      for (int i = 8; i >= 0; i--) {
+        if (A[i] > 0.f) {
           return i;
+        }
+      }
 
     case TrillCtrl::B :
-      for (int i = 7; i >= 0; i--) 
-        if (B[i] > 0.f)  return i;
+      for (int i = 7; i >= 0; i--) {
+        if (B[i] > 0.f)  {
+          return i;
+        }
+      }
 
     case TrillCtrl::C :
-      for (int i = 8; i >= 0; i--) 
-        if (C[i] > 0.f) return i;
+      for (int i = 8; i >= 0; i--) {
+        if (C[i] > 0.f) {
+          return i;
+        }
+      }
 
     case TrillCtrl::D :
-      for (int i = 9; i >= 0; i--) 
-        if (D[i] > 0.f)  return i;
+      for (int i = 9; i >= 0; i--) {
+        if (D[i] > 0.f)  {
+          return i;
+        }
+      }
 
     default:
-      break;
+      return -1;
   }
 }
 
@@ -73,23 +105,36 @@ int TrillHandler::getTop(TrillCtrl field) {
 int TrillHandler::getBottom(TrillCtrl field) {
   switch (field) {
     case TrillCtrl::A :
-      for (int i = 0; i < 9; i++) 
-        if (A[i] > 0.f) return i;
+      for (int i = 0; i < 9; i++) {
+        if (A[i] > 0.f) {
+          return i;
+        }
+      }
 
     case TrillCtrl::B :
-      for (int i = 0; i < 8; i++) 
-        if (B[i] > 0.f)  return i;
+      for (int i = 0; i < 8; i++) {
+        if (B[i] > 0.f)  {
+          return i;
+        }
+      }
 
     case TrillCtrl::C :
-      for (int i = 0; i < 9; i++) 
-        if (C[i] > 0.f) return i;
+      for (int i = 0; i < 9; i++) {
+        if (C[i] > 0.f) {
+          return i;
+        }
+      }
 
     case TrillCtrl::D :
-      for (int i = 0; i < 10; i++) 
-        if (D[i] > 0.f) return i;
+      for (int i = 0; i < 10; i++) {
+        if (D[i] > 0.f) {
+          return i;
+        }
+      }
 
     default:
-      break;
+      return -1;
+      // break;
   }
 }
 
@@ -98,23 +143,35 @@ float TrillHandler::max(TrillCtrl field) {
   float max = 0.f;
   switch (field) {
     case TrillCtrl::A :
-      for (auto &x: A) 
-        if (x > max) max = x;
+      for (auto &x: A) {
+        if (x > max) {
+          max = x;
+        }
+      }
       break;
 
     case TrillCtrl::B :
-      for (auto &x: B) 
-        if (x > max) max = x;
+      for (auto &x: B) {
+        if (x > max) {
+          max = x;
+        }
+      }
       break;
 
     case TrillCtrl::C :
-      for (auto &x: C) 
-        if (x > max) max = x;
+      for (auto &x: C) {
+        if (x > max) {
+          max = x;
+        }
+      }
       break;
 
     case TrillCtrl::D :
-      for (auto &x: D) 
-        if (x > max) max = x;
+      for (auto &x: D) {
+        if (x > max) {
+          max = x;
+        }
+      }
       break;
 
     default:
@@ -129,22 +186,33 @@ float TrillHandler::min(TrillCtrl field) {
   switch (field) {
     case TrillCtrl::A :
       for (auto &x: A) 
-        if (x < min) min = x;
+        if (x < min) {
+          min = x;
+        }
       break;
 
     case TrillCtrl::B :
-      for (auto &x: B) 
-        if (x < min) min = x;
+      for (auto &x: B) {
+        if (x < min) {
+          min = x;
+        }
+      }
       break;
 
     case TrillCtrl::C :
-      for (auto &x: C) 
-        if (x < min) min = x;
+      for (auto &x: C) {
+        if (x < min) {
+          min = x;
+        }
+      }
       break;
 
     case TrillCtrl::D :
-      for (auto &x: D) 
-        if (x < min) min = x;
+      for (auto &x: D) {
+        if (x < min) {
+          min = x;
+        }
+      }
       break;
 
     default:
@@ -175,9 +243,10 @@ std::tuple<float, int> TrillHandler::globalMin() {
   int idx = 0;
   int i = 0;
   for (float &x: m_trill->rawData) {
-    if (x < min) 
+    if (x < min) {
       min = m_trill->rawData[i];
       idx = i;
+    }
     i++;
   }
 
@@ -190,9 +259,15 @@ int TrillHandler::getVertical() {
   int idx = 0; 
   calcSum();
   int i = 0;
-  for (auto &x: {A_sum, B_sum, C_sum, D_sum}) 
+  for (auto &x: {A_sum, B_sum, C_sum, D_sum}) {
     if (x > max) idx = i;
     i++;
+  }
+  return idx;
+}
+
+float TrillHandler::getPinValue(unsigned pin) {
+  return float(m_trill->rawData[pin]*100000) / 50000000.f;
 }
 
 

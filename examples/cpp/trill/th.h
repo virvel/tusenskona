@@ -10,6 +10,12 @@ enum class TrillCtrl {
   D
 };
 
+// add scan settings here
+struct TrillConfig {
+  int prescaler;
+  float threshold;
+};
+
 
 class TrillHandler {
   // unsigned A_offset = 9, 
@@ -17,19 +23,21 @@ class TrillHandler {
   //          C_offset = B_offset + 9, 
   //          D_offset = C_offset + 10;
 
-  float A[9]; 
-  float B[8]; 
-  float C[9]; 
-  float D[10];
+  float A[9]{0};  // 0 - 8
+  float B[8]{0};  // 9 - 16
+  float C[9]{0};  // 17 - 25
+  float D[10]{0}; // 26 - 29 !! not enough pins on trill craft 
 
   float A_sum, B_sum, C_sum, D_sum;
 
   Trill* m_trill;
 
-  TrillHandler();
-  int init(Trill* trill);
 
   public: 
+    TrillHandler();
+    int init(Trill* trill);
+    int init(Trill* trill, unsigned i2c_bus);
+    void config(TrillConfig);
     void poll();
     void calcSum();
     int getTop(TrillCtrl);
@@ -40,4 +48,6 @@ class TrillHandler {
 
     std::tuple<float, int> globalMax();
     std::tuple<float, int> globalMin();
+
+    float getPinValue(unsigned pin);
 };

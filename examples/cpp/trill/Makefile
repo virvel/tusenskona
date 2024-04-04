@@ -5,7 +5,7 @@ ROOT_DIR = ../../..
 DSP_DIR = $(ROOT_DIR)/dsp-headers/dsp
 
 # Sources
-CPP_SOURCES = trill.cpp $(ROOT_DIR)/src/tusenskona.cpp $(DSP_DIR)/wavetable.cpp $(DSP_DIR)/interpolation.cpp
+CPP_SOURCES = trill.cpp th.cpp $(ROOT_DIR)/src/tusenskona.cpp $(DSP_DIR)/wavetable.cpp $(DSP_DIR)/interpolation.cpp
 
 # Library Locations
 LIBDAISY_DIR = $(ROOT_DIR)/libDaisy

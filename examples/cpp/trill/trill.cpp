@@ -1,28 +1,32 @@
-#include "../../../src/tusenskona.h"
+#include "src/tusenskona.h"
 #include "../../../DaisySP/Source/daisysp.h"
 #include "../../../libDaisy/src/dev/trill/Trill.h"
 #include "../../../dsp-headers/dsp/wavetable.hpp"
 #include "../../../dsp-headers/dsp/interpolation.hpp"
+#include "th.h"
 #include <memory>
 
 #define SAMPLE_RATE 44100
 #define BLOCK_SIZE 32
+#define VOICES 9
 
 using namespace daisy;
 using namespace daisysp;
 using namespace dspheaders;
 
-Wavetable* wta[10];
+Wavetable* wta[VOICES];
 
-int vol[10] = {0};
+int vol[VOICES] = {0};
 
 Tusenskona hw;
+Trill trill;
+TrillHandler th;
 
 void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
   for (size_t i = 0; i < size; i++) {
     float sig;
-    for (int j = 0; j < 10; j++) {
-      sig += wta[j]->play() * (float(vol[j]) / 50000000.f) * 0.2;
+    for (int j = 0; j < VOICES; j++) {
+      sig += wta[j]->play() * th.getPinValue(j) * 0.2;
     }
     out[0][i] = sig;
     out[1][i] = sig;
@@ -32,7 +36,6 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
 int main(void) {
   hw.Init();
   hw.seed.StartLog();
-  Trill trill;
 
   hw.SetAudioSampleRate(daisy::SaiHandle::Config::SampleRate(SAMPLE_RATE));
   hw.SetAudioBlockSize(BLOCK_SIZE); // number of samples handled per callback
@@ -45,32 +48,16 @@ int main(void) {
     ot+=1.f;
   }
 
-  int i2cBus = 1;
+  hw.StartAdc();
+  hw.StartAudio(AudioCallback);
 
-  int ret = trill.setup(i2cBus, Trill::CRAFT);
-
+  int ret = th.init(&trill);
   if (ret) {
     hw.seed.PrintLine("trill.setup() returned %d", ret);
   }
 
-  hw.StartAdc();
-  hw.StartAudio(AudioCallback);
-
-  trill.setPrescaler(4);
-
   while(1) {
-    // hw.seed.DelayMs(100);
-    trill.readI2C();
-    int i = 0;
-    for (auto &x: trill.rawData) {
-      int v = int(x*100000.f);
-      // hw.seed.Print("%d ", v);
-      if (i < 10) {
-        vol[i] = v;
-      }
-      i++;
-    }
-    hw.seed.PrintLine("");
+    th.poll();
   }
 }
 
